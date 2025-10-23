@@ -1,170 +1,434 @@
-# FHEVM React Template
+# Food Safety Reporting System
 
-A minimal React frontend template for building FHEVM-enabled decentralized applications (dApps). This template provides a simple development interface for interacting with FHEVM smart contracts, specifically the `FHECounter.sol` contract.
+A privacy-preserving food safety reporting platform powered by Fully Homomorphic Encryption (FHE) technology, enabling anonymous whistleblowing while maintaining data integrity and regulatory oversight.
 
-## 🚀 What is FHEVM?
+**Live Demo**: [https://fhe-food-safety.vercel.app/](https://fhe-food-safety.vercel.app/)
 
-FHEVM (Fully Homomorphic Encryption Virtual Machine) enables computation on encrypted data directly on Ethereum. This template demonstrates how to build dApps that can perform computations while keeping data private.
+**Demo Video**: [Watch the demonstration demo.mp4]
 
-## ✨ Features
+🔗 **Smart Contract**: [Sepolia Testnet - 0x09611Fc40177fe10D518C13F5c32fE8E1A29A656](https://sepolia.etherscan.io/address/0x09611Fc40177fe10D518C13F5c32fE8E1A29A656)
 
-- **🔐 FHEVM Integration**: Built-in support for fully homomorphic encryption
-- **⚛️ React + Next.js**: Modern, performant frontend framework
-- **🎨 Tailwind CSS**: Utility-first styling for rapid UI development
-- **🔗 RainbowKit**: Seamless wallet connection and management
-- **🌐 Multi-Network Support**: Works on both Sepolia testnet and local Hardhat node
-- **📦 Monorepo Structure**: Organized packages for SDK, contracts, and frontend
+## Overview
 
-## 📋 Prerequinextjss
+The Food Safety Reporting System revolutionizes how food safety concerns are reported and investigated. By leveraging cutting-edge Fully Homomorphic Encryption from Zama's fhEVM, the platform ensures complete anonymity for whistleblowers while enabling authorized regulators to perform investigations and maintain food safety standards.
 
-Before you begin, ensure you have:
+## Key Features
 
-- **Node.js** (v18 or higher)
-- **pnpm** package manager
-- **MetaMask** browser extension
-- **Git** for cloning the repository
+### For Whistleblowers
+- **Complete Anonymity**: Identity never exposed or stored
+- **Secure Submission**: End-to-end encryption using FHE
+- **No Registration Required**: Report using just a Web3 wallet
+- **Permanent Record**: Immutable blockchain storage prevents tampering
+- **Status Tracking**: Monitor investigation progress anonymously
 
-## 🛠️ Quick Start
+### For Regulators
+- **Centralized Dashboard**: Overview of all reports and their status
+- **Investigator Management**: Authorize and revoke investigator access
+- **Priority Assessment**: Encrypted safety levels help prioritize cases
+- **Geographic Insights**: Location-based statistics for trend analysis
+- **Audit Trail**: Complete history of all actions and decisions
 
-### 1. Clone and Setup
+### For Investigators
+- **Assigned Cases**: Clear workflow for investigation management
+- **Controlled Access**: Decrypt only authorized information
+- **Findings Documentation**: Record investigation results on-chain
+- **Collaboration**: Multiple investigators can work on complex cases
+- **Status Updates**: Keep stakeholders informed throughout the process
+
+## Technology Stack
+
+- **Smart Contract Development**: Hardhat
+- **Blockchain**: Ethereum (Sepolia Testnet)
+- **Privacy Layer**: Zama fhEVM (Fully Homomorphic Encryption)
+- **Language**: Solidity ^0.8.24
+- **Testing**: Hardhat, Chai, Ethers.js
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js v18 or higher
+- npm or yarn
+- MetaMask or similar Web3 wallet
+
+### Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd fhevm-react-template
-
-# Initialize submodules (includes fhevm-hardhat-template)
-git submodule update --init --recursive
+git clone https://github.com/YourUsername/food-safety-reporting.git
+cd food-safety-reporting
 
 # Install dependencies
-pnpm install
+npm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Edit .env and add your configuration
 ```
 
-### 2. Environment Configuration
+### Configuration
 
-Set up your Hardhat environment variables by following the [FHEVM documentation](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup#set-up-the-hardhat-configuration-variables-optional):
+Edit `.env` with your settings:
 
-- `MNEMONIC`: Your wallet mnemonic phrase
-- `INFURA_API_KEY`: Your Infura API key for Sepolia
-
-### 3. Start Development Environment
-
-**Option A: Local Development (Recommended for testing)**
-
-```bash
-# Terminal 1: Start local Hardhat node
-pnpm chain
-# RPC URL: http://127.0.0.1:8545 | Chain ID: 31337
-
-# Terminal 2: Deploy contracts to localhost
-pnpm deploy:localhost
-
-# Terminal 3: Start the frontend
-pnpm start
+```env
+PRIVATE_KEY=your_private_key_here
+SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/your-api-key
+ETHERSCAN_API_KEY=your_etherscan_api_key_here
 ```
 
-**Option B: Sepolia Testnet**
+### Compile Contracts
 
 ```bash
+npx hardhat compile
+```
+
+### Run Tests
+
+```bash
+# Run all tests
+npx hardhat test
+
+# Run with gas reporting
+REPORT_GAS=true npx hardhat test
+
+# Run with coverage
+npx hardhat coverage
+```
+
+### Deploy
+
+```bash
+# Deploy to local network
+npx hardhat node
+npx hardhat run scripts/deploy.js --network localhost
+
 # Deploy to Sepolia testnet
-pnpm deploy:sepolia
-
-# Start the frontend
-pnpm start
+npx hardhat run scripts/deploy.js --network sepolia
 ```
 
-### 4. Connect MetaMask
+### Verify Contract
 
-1. Open [http://localhost:3000](http://localhost:3000) in your browser
-2. Click "Connect Wallet" and select MetaMask
-3. If using localhost, add the Hardhat network to MetaMask:
-   - **Network Name**: Hardhat Local
-   - **RPC URL**: `http://127.0.0.1:8545`
-   - **Chain ID**: `31337`
-   - **Currency Symbol**: `ETH`
-
-### ⚠️ Sepolia Production note
-
-- In production, `NEXT_PUBLIC_ALCHEMY_API_KEY` must be set (see `packages/nextjs/scaffold.config.ts`). The app throws if missing.
-- Ensure `packages/nextjs/contracts/deployedContracts.ts` points to your live contract addresses.
-- Optional: set `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` for better WalletConnect reliability.
-- Optional: add per-chain RPCs via `rpcOverrides` in `packages/nextjs/scaffold.config.ts`.
-
-## 🔧 Troubleshooting
-
-### Common MetaMask + Hardhat Issues
-
-When developing with MetaMask and Hardhat, you may encounter these common issues:
-
-#### ❌ Nonce Mismatch Error
-
-**Problem**: MetaMask tracks transaction nonces, but when you restart Hardhat, the node resets while MetaMask doesn't update its tracking.
-
-**Solution**:
-1. Open MetaMask extension
-2. Select the Hardhat network
-3. Go to **Settings** → **Advanced**
-4. Click **"Clear Activity Tab"** (red button)
-5. This resets MetaMask's nonce tracking
-
-#### ❌ Cached View Function Results
-
-**Problem**: MetaMask caches smart contract view function results. After restarting Hardhat, you may see outdated data.
-
-**Solution**:
-1. **Restart your entire browser** (not just refresh the page)
-2. MetaMask's cache is stored in extension memory and requires a full browser restart to clear
-
-> 💡 **Pro Tip**: Always restart your browser after restarting Hardhat to avoid cache issues.
-
-For more details, see the [MetaMask development guide](https://docs.metamask.io/wallet/how-to/run-devnet/).
-
-## 📁 Project Structure
-
-This template uses a monorepo structure with three main packages:
-
-```
-fhevm-react-template/
-├── packages/
-│   ├── fhevm-hardhat-template/    # Smart contracts & deployment
-│   ├── fhevm-sdk/                 # FHEVM SDK package
-│   └── nextjs/                      # React frontend application
-└── scripts/                       # Build and deployment scripts
+```bash
+npx hardhat run scripts/verify.js --network sepolia
 ```
 
-### Key Components
+## Project Structure
 
-#### 🔗 FHEVM Integration (`packages/nextjs/hooks/fhecounter-example/`)
-- **`useFHECounterWagmi.tsx`**: Example hook demonstrating FHEVM contract interaction
-- Essential hooks for FHEVM-enabled smart contract communication
-- Easily copyable to any FHEVM + React project
+```
+.
+├── contracts/              # Solidity smart contracts
+│   └── AnonymousFoodSafety.sol
+├── scripts/               # Deployment and interaction scripts
+│   ├── deploy.js         # Main deployment script
+│   ├── verify.js         # Contract verification script
+│   ├── interact.js       # Contract interaction examples
+│   └── simulate.js       # Full workflow simulation
+├── test/                 # Test files
+│   └── FoodSafety.test.js
+├── hardhat.config.js     # Hardhat configuration
+├── package.json          # Project dependencies
+├── .env.example         # Environment variables template
+├── DEPLOYMENT.md        # Detailed deployment guide
+└── README.md           # This file
+```
 
-#### 🎣 Wallet Management (`packages/nextjs/hooks/helper/`)
-- MetaMask wallet provider hooks
-- Compatible with EIP-6963 standard
-- Easily adaptable for other wallet providers
+## Smart Contract Architecture
 
-#### 🔧 Flexibility
-- Replace `ethers.js` with `Wagmi` or other React-friendly libraries
-- Modular architecture for easy customization
-- Support for multiple wallet providers
+### Core Components
 
-## 📚 Additional Resources
+**AnonymousFoodSafety Contract**
 
-### Official Documentation
-- [FHEVM Documentation](https://docs.zama.ai/protocol/solidity-guides/) - Complete FHEVM guide
-- [FHEVM Hardhat Guide](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat) - Hardhat integration
-- [Relayer SDK Documentation](https://docs.zama.ai/protocol/relayer-sdk-guides/) - SDK reference
-- [Environment Setup](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup#set-up-the-hardhat-configuration-variables-optional) - MNEMONIC & API keys
+The main contract implements:
+- **Encrypted Report Submission**: All sensitive data encrypted using FHE
+- **Role-Based Access**: Owner, regulator, and investigator roles
+- **Investigation Workflow**: Structured process from submission to resolution
+- **Privacy-Preserving Queries**: Statistical analysis without data exposure
+- **Event Logging**: Transparent activity tracking
 
-### Development Tools
-- [MetaMask + Hardhat Setup](https://docs.metamask.io/wallet/how-to/run-devnet/) - Local development
-- [React Documentation](https://reactjs.org/) - React framework guide
+### Data Structures
 
-### Community & Support
-- [FHEVM Discord](https://discord.com/invite/zama) - Community support
-- [GitHub Issues](https://github.com/zama-ai/fhevm-react-template/issues) - Bug reports & feature requests
+```solidity
+enum ReportStatus {
+    Submitted,      // Report received
+    UnderReview,    // Being reviewed
+    Investigating,  // Active investigation
+    Resolved,       // Investigation complete
+    Closed          // Report closed
+}
 
-## 📄 License
+enum SafetyLevel {
+    Unknown,        // Not yet assessed
+    Safe,          // No significant issues
+    Warning,       // Moderate concern
+    Danger,        // Serious violation
+    Critical       // Severe threat
+}
+```
 
-This project is licensed under the **BSD-3-Clause-Clear License**. See the [LICENSE](LICENSE) file for details.
+### Key Functions
+
+- `submitAnonymousReport()`: Submit encrypted food safety report
+- `authorizeInvestigator()`: Grant investigation permissions
+- `startInvestigation()`: Begin investigating a report
+- `completeInvestigation()`: Record investigation findings
+- `getTotalStats()`: Get system-wide statistics
+- `getLocationStats()`: Get location-specific data
+
+## Usage Examples
+
+### Submit a Report
+
+```javascript
+await contract.submitAnonymousReport(
+  3,      // SafetyLevel.Danger
+  1001,   // Location code
+  5001,   // Food type code
+  "Expired ingredients found in storage area"
+);
+```
+
+### Authorize an Investigator
+
+```javascript
+await contract.authorizeInvestigator(investigatorAddress);
+```
+
+### Start Investigation
+
+```javascript
+await contract.startInvestigation(reportId);
+```
+
+### Complete Investigation
+
+```javascript
+await contract.completeInvestigation(
+  reportId,
+  3, // Final safety level
+  "Investigation confirmed: Issue resolved, facility compliant"
+);
+```
+
+### Get Statistics
+
+```javascript
+const stats = await contract.getTotalStats();
+console.log(`Total Reports: ${stats.total}`);
+console.log(`Resolved: ${stats.resolved}`);
+```
+
+## Scripts
+
+### Deployment Script
+
+```bash
+npx hardhat run scripts/deploy.js --network sepolia
+```
+
+Deploys the contract and saves deployment information.
+
+### Verification Script
+
+```bash
+npx hardhat run scripts/verify.js --network sepolia
+```
+
+Verifies the contract on Etherscan.
+
+### Interaction Script
+
+```bash
+npx hardhat run scripts/interact.js --network sepolia
+```
+
+Demonstrates all contract functions with example data.
+
+### Simulation Script
+
+```bash
+npx hardhat run scripts/simulate.js --network localhost
+```
+
+Runs a complete simulation with multiple reports and investigations.
+
+## Testing
+
+The project includes comprehensive tests covering:
+
+- ✅ Contract deployment
+- ✅ Access control and permissions
+- ✅ Report submission
+- ✅ Investigation workflow
+- ✅ Statistics and queries
+- ✅ Batch operations
+- ✅ Emergency controls
+- ✅ Edge cases and error handling
+
+Run tests with:
+
+```bash
+npx hardhat test
+```
+
+Expected output:
+```
+  AnonymousFoodSafety
+    ✓ Should set the correct owner
+    ✓ Should allow report submission
+    ✓ Should authorize investigators
+    ... (50+ tests)
+
+  50 passing (5s)
+```
+
+## Deployment Information
+
+### Sepolia Testnet
+
+- **Network**: Sepolia Ethereum Testnet
+- **Chain ID**: 11155111
+- **Block Explorer**: https://sepolia.etherscan.io
+
+### Contract Details
+
+After deployment, you'll receive:
+- Contract address
+- Transaction hash
+- Etherscan verification link
+- Initial contract state
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
+
+## Security Considerations
+
+### Privacy Protection
+
+- All sensitive data encrypted with FHE
+- Reporter identities never stored in plaintext
+- Investigators only access authorized data
+- Statistical queries preserve anonymity
+
+### Access Control
+
+- Three-tier permission system (Owner, Regulator, Investigator)
+- Role-based function restrictions
+- Emergency override capabilities for owner
+
+### Data Integrity
+
+- Immutable blockchain storage
+- Cryptographic verification of all data
+- Tamper-proof audit trail
+- Event logging for transparency
+
+## FHE Implementation
+
+This project uses Zama's fhEVM for Fully Homomorphic Encryption:
+
+- **Encrypted Data Types**: `euint8`, `euint32`, `eaddress`
+- **Operations**: Comparisons and calculations on encrypted values
+- **Privacy**: Computations without decryption
+- **Security**: Industry-leading FHE implementation
+
+Learn more: [Zama fhEVM Documentation](https://docs.zama.ai/fhevm)
+
+## Use Cases
+
+### Food Manufacturing Plants
+Workers report unsafe practices without fear of retaliation
+
+### Restaurant Employees
+Front-line staff flag hygiene issues anonymously
+
+### Supply Chain Partners
+Distributors report quality concerns confidentially
+
+### Quality Inspectors
+Third-party auditors share findings securely
+
+### Consumer Reports
+Individuals contribute to food safety databases privately
+
+## Roadmap
+
+- [x] Core contract development
+- [x] FHE integration
+- [x] Comprehensive testing
+- [x] Deployment scripts
+- [x] Documentation
+- [ ] Frontend interface
+- [ ] Mobile application
+- [ ] Analytics dashboard
+- [ ] Multi-language support
+- [ ] Integration with regulatory systems
+
+## Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow Solidity style guide
+- Add tests for new features
+- Update documentation
+- Keep gas costs optimized
+- Ensure privacy is maintained
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue**: Contract deployment fails
+- Check you have sufficient testnet ETH
+- Verify RPC URL is correct
+- Ensure private key is set in .env
+
+**Issue**: Tests fail
+- Run `npm install` to ensure dependencies are installed
+- Check Hardhat network configuration
+- Verify contract compilation succeeded
+
+**Issue**: Verification fails
+- Wait 1-2 minutes after deployment
+- Ensure ETHERSCAN_API_KEY is set
+- Confirm you're on the correct network
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for more troubleshooting tips.
+
+## Resources
+
+- **Hardhat Documentation**: https://hardhat.org/docs
+- **Zama fhEVM**: https://docs.zama.ai/fhevm
+- **Etherscan**: https://sepolia.etherscan.io
+- **Solidity Docs**: https://docs.soliditylang.org
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- **Zama** for pioneering FHE technology
+- **Hardhat** team for excellent development tools
+- **Ethereum** community for blockchain infrastructure
+- All contributors to open-source Web3 tools
+
+## Contact
+
+For questions, issues, or collaboration:
+
+- GitHub Issues: [Report bugs or request features](https://github.com/YourUsername/food-safety-reporting/issues)
+- Discussions: [Join the conversation](https://github.com/YourUsername/food-safety-reporting/discussions)
+
+---
+
+**Built with privacy at the core. Powered by Fully Homomorphic Encryption.**
+
+*Protecting those who protect us.*
