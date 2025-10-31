@@ -121,16 +121,77 @@ function MyComponent() {
 │       │   └── index.ts        # Main exports
 │       └── README.md           # SDK documentation
 │
+├── templates/                  # Framework templates
+│   ├── nextjs/                 # Next.js template
+│   └── react/                  # React template
+│
 ├── examples/
 │   ├── nextjs-app/             # Next.js example (Required)
-│   │   ├── app/
-│   │   │   ├── page.tsx        # Main page with encryption demo
-│   │   │   └── layout.tsx
+│   │   ├── src/
+│   │   │   ├── app/            # App Router
+│   │   │   │   ├── page.tsx    # Main page
+│   │   │   │   ├── layout.tsx  # Root layout
+│   │   │   │   ├── globals.css # Global styles
+│   │   │   │   └── api/        # API routes
+│   │   │   │       ├── fhe/    # FHE operations
+│   │   │   │       │   ├── route.ts
+│   │   │   │       │   ├── encrypt/route.ts
+│   │   │   │       │   ├── decrypt/route.ts
+│   │   │   │       │   └── compute/route.ts
+│   │   │   │       └── keys/route.ts
+│   │   │   │
+│   │   │   ├── components/     # React components
+│   │   │   │   ├── ui/         # Base UI components
+│   │   │   │   │   ├── Button.tsx
+│   │   │   │   │   ├── Input.tsx
+│   │   │   │   │   └── Card.tsx
+│   │   │   │   ├── fhe/        # FHE components
+│   │   │   │   │   ├── FHEProvider.tsx
+│   │   │   │   │   ├── EncryptionDemo.tsx
+│   │   │   │   │   ├── ComputationDemo.tsx
+│   │   │   │   │   └── KeyManager.tsx
+│   │   │   │   └── examples/   # Example components
+│   │   │   │       ├── BankingExample.tsx
+│   │   │   │       └── MedicalExample.tsx
+│   │   │   │
+│   │   │   ├── lib/            # Libraries
+│   │   │   │   ├── fhe/        # FHE utilities
+│   │   │   │   │   ├── client.ts
+│   │   │   │   │   ├── server.ts
+│   │   │   │   │   ├── keys.ts
+│   │   │   │   │   └── types.ts
+│   │   │   │   └── utils/      # Utility functions
+│   │   │   │       ├── security.ts
+│   │   │   │       └── validation.ts
+│   │   │   │
+│   │   │   ├── hooks/          # Custom hooks
+│   │   │   │   ├── useFHE.ts
+│   │   │   │   ├── useEncryption.ts
+│   │   │   │   └── useComputation.ts
+│   │   │   │
+│   │   │   └── types/          # TypeScript types
+│   │   │       ├── fhe.ts
+│   │   │       └── api.ts
+│   │   │
 │   │   └── package.json
 │   │
-│   ├── react-example/          # React example (Optional)
+│   ├── react-example/          # React example with SDK integration
+│   │   ├── src/
+│   │   │   ├── components/     # React components
+│   │   │   │   ├── WalletConnect.tsx
+│   │   │   │   ├── EncryptionDemo.tsx
+│   │   │   │   └── DecryptionDemo.tsx
+│   │   │   ├── App.tsx         # Main application
+│   │   │   └── main.tsx        # Entry point
+│   │   └── package.json
 │   │
-│   └── food-safety-reporter/   # Complete dApp example
+│   └── food-safety-reporter/   # Complete React dApp example
+│       ├── src/
+│       │   ├── components/     # React components
+│       │   ├── hooks/          # Custom hooks
+│       │   ├── context/        # React context
+│       │   ├── types/          # TypeScript types
+│       │   └── utils/          # Utilities
 │       ├── contracts/          # Smart contracts
 │       │   └── AnonymousFoodSafety.sol
 │       ├── scripts/            # Deployment scripts
@@ -162,10 +223,29 @@ npm run dev
 
 Visit `http://localhost:3000`
 
-### 2. Food Safety Reporter (Complete dApp)
+### 2. React Example
+
+A basic React application demonstrating SDK integration:
+- Wallet connection with MetaMask
+- Data encryption using FHEVM
+- Data decryption with EIP-712 signatures
+- Clean, modern UI with TypeScript
+
+**Location**: `examples/react-example/`
+
+**Run**:
+```bash
+cd examples/react-example
+npm install
+npm run dev
+```
+
+Visit `http://localhost:3001`
+
+### 3. Food Safety Reporter (Complete React dApp)
 
 A privacy-preserving food safety reporting platform demonstrating:
-- Anonymous report submission
+- Anonymous report submission (now in React!)
 - Encrypted sensitive data (safety levels, locations, food types)
 - Role-based access control
 - Investigation workflow
@@ -175,8 +255,18 @@ A privacy-preserving food safety reporting platform demonstrating:
 
 **Features**:
 - Smart contract with FHE types (`euint8`, `euint32`, `eaddress`)
-- SDK integration for encryption/decryption
+- Full React application with SDK integration
 - Complete workflow from submission to resolution
+- Modern UI with hooks and context
+
+**Run**:
+```bash
+cd examples/food-safety-reporter
+npm install
+npm run dev
+```
+
+Visit `http://localhost:3000`
 
 ## SDK Features
 
